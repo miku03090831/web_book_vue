@@ -4,6 +4,7 @@
     <el-table
     :data="pagedBookInfo"
     stripe
+    border
     style="width: 100%"
     empty-text="没有搜索结果"
     @selection-change="selectionChanged"
@@ -14,18 +15,35 @@
           width="55">
         </el-table-column>
         <el-table-column
-          prop="userId"
-          label="日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
           prop="id"
-          label="姓名"
-          width="180">
+          label="书号"
+          width="50">
         </el-table-column>
         <el-table-column
           prop="title"
-          label="地址">
+          label="书名"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="author"
+          label="作者"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="price"
+          label="价格"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="recommend"
+          label="好评度"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          label="详情">
+          <template slot-scope="scope">
+            <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+          </template>
         </el-table-column>
     </el-table>      
     <!-- test -->
@@ -86,7 +104,9 @@ export default {
         }
   },
   methods:{
-      
+      handleClick(row){
+        console.log(row.id)
+      },      
       selectionChanged(val){
           if(!this.pageChangedFlag){
             this.currentSelected=val;
@@ -101,14 +121,20 @@ export default {
         //         console.log(this.selected[item].id)
         //     }
         // }
+        
+        let selectedId=[]
         if(this.selected.length!=0){
           for(let key in this.selected){
             for(let item in this.selected[key]){
-              console.log(this.selected[key][item].id)
+              selectedId.push(this.selected[key][item].id)
             }
           }
         } 
+        console.log(selectedId)
         //发送请求，把数据删除
+        this.$axios.post("/api/DeleteBook",{
+          idArray: selectedId
+        })
         //然后重新请求数据
         this.$emit("searchAgain",this.query);
         //然后把选中清零

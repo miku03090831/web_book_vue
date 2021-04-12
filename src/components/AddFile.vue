@@ -48,6 +48,9 @@ export default {
     },
     onSubmit(){
       console.log(this.fileName);
+      this.$axios.post("api/AddFile",this.fileName).then(res=>{
+        console.log(res)
+      })
       this.failList=[{
     "userId": 1,
     "id": 1,

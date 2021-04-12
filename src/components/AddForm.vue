@@ -43,11 +43,15 @@ export default {
   },
   methods:{
     onSubmit(){
-      console.log(this.book);
+      //console.log(this.book);
       //axios异步添加，成功后弹出提示
-       this.$alert('添加成功','网页提示',{
+      this.$axios.post("api/Addone",this.book).then(res=>{
+        console.log(res.data)
+        this.$alert(res.data,'网页提示',{
          confirmButtonText:'确定'
        })
+      })
+       
     }
   }
  
@@ -58,3 +62,4 @@ export default {
 
 
 </style>
+

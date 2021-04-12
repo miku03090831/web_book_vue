@@ -3,7 +3,7 @@
       <section class="form_container">
           <div class="logintip">
                 <span class="title">管理员登录</span>
-                <el-form :model="admin" label-width="60px" :label-position='right' class="loginForm">
+                <el-form :model="admin" label-width="60px" label-position='right' class="loginForm">
                     <el-form-item label="用户名">
                         <el-input v-model="admin.userName" placeholder="请输入用户名" suffix-icon="el-icon-user-solid"></el-input>
                     </el-form-item>
@@ -38,6 +38,14 @@ export default {
       onSubmit(){
           console.log(this.admin.userName);
           console.log(this.admin.password);
+          this.$axios.post("api/Login",this.admin).then(res=>{
+            if(res.status === 200){
+              this.$store.commit('login');
+              this.$router.push('/home');
+            }
+          }).catch(()=>{
+            this.$message({message:"登录失败,请核对账号密码",type:"error"})
+          })
       }
   }
 }

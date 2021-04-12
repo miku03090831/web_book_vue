@@ -25,7 +25,7 @@
             <el-input v-model="beforeBook.price" :disabled="true"></el-input>
           </div>
           <div class="key5">图片链接
-            <el-input v-model="beforeBook.pic_refs" :disabled="true"></el-input>
+            <el-input v-model="beforeBook.pic_refs" type="textarea" :disabled="true"></el-input>
           </div>
         </el-card>
       </div>
@@ -47,7 +47,7 @@
             <el-input v-model="afterBook.price"></el-input>
           </div>
           <div class="key5">图片链接
-            <el-input v-model="afterBook.pic_refs"></el-input>
+            <el-input v-model="afterBook.pic_refs" type="textarea"></el-input>
           </div>
         </el-card>
       </div>
@@ -70,13 +70,15 @@ export default {
     return {
       bookNum:"",
       beforeBook:{
-        title:"asdc",
+        id:"",
+        title:"",
         author:"",
         recommend:"",
         price:"",
         pic_refs:""
       },
       afterBook:{
+        id:"",
         title:"",
         author:"",
         recommend:"",
@@ -87,13 +89,29 @@ export default {
   },
   methods:{
     select(){
-        console.log(this.bookNum);
-        this.beforeBook={title:"123",author:"456",recommend:"789",price:"1234",pic_refs:"123234"}
+        this.$axios.post("api/SearchBook",{
+          'keyword':this.bookNum,
+          'type': 3
+        }).then(res=>{
+          console.log(res.data[0])
+          this.beforeBook=res.data[0]//在此处发起请求，更改unpagedBookInfo的值
+          this.afterBook= JSON.parse(JSON.stringify(this.beforeBook));
+        })
+        // console.log(this.beforeBook)
+        // this.beforeBook={title:"123",author:"456",recommend:"789",price:"1234",pic_refs:"123234"}
         //通过对象深拷贝，使得默认情况下修改后和修改前相同。用户只需用去修改想改的某个属性即可，而不修改的属性不用重新填写
-        this.afterBook= JSON.parse(JSON.stringify(this.beforeBook));
+        
     },
     submitChange(){
-      console.log(this.afterBook)
+      this.$axios.post("api/UpdateBook",this.afterBook).then(res=>{
+        this.$alert(res.data,'网页提示',{
+          confirmButtonText:'确定'
+        })
+      }
+      //   this.$alert(res.data,'网页提示',{
+      //    confirmButtonText:'确定'
+      //  })
+      )
     }
   }
  
