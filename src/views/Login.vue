@@ -20,7 +20,7 @@
 </template>
 
 <script>
-
+import store from "../store"
 
 export default {
   name: 'Login',
@@ -41,6 +41,8 @@ export default {
           this.$axios.post("api/Login",this.admin).then(res=>{
             if(res.status === 200){
               this.$store.commit('login');
+              
+              localStorage.setItem('login',store.state.loginStatus)
               this.$router.push('/home');
             }
           }).catch(()=>{

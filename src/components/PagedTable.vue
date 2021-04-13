@@ -105,6 +105,9 @@ export default {
   },
   methods:{
       handleClick(row){
+        let detailRoute = this.$router.resolve({path: "/detail",query:{id: row.id}})
+        // this.$router.push({path: "/detail",query:{id: row.id}})
+        window.open(detailRoute.href)
         console.log(row.id)
       },      
       selectionChanged(val){
