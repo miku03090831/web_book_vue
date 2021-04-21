@@ -47,9 +47,11 @@
         </el-table-column>
     </el-table>      
     <!-- test -->
-    <el-button @click="deleteData" type="danger">删除所有选中图书</el-button>
-    <el-button @click="clearAll" type="primary">取消所有选中</el-button>
-    <el-button @click="selectAll" type="primary">全选</el-button>
+    <div class="buttonset">
+      <el-button @click="deleteData" type="danger">删除所有选中图书</el-button>
+      <el-button @click="clearAll" type="primary">取消所有选中</el-button>
+      <el-button @click="selectAll" type="primary">全选</el-button>
+    </div>
     <!-- 分页栏 -->
     <div class="paged">
         <el-pagination

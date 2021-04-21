@@ -96,7 +96,9 @@ export default {
           console.log(res.data[0])
           this.beforeBook=res.data[0]//在此处发起请求，更改unpagedBookInfo的值
           this.afterBook= JSON.parse(JSON.stringify(this.beforeBook));
-        })
+        }).catch(()=>{
+            this.$message({message:"书本不存在或需要重新登录",type:"error"})
+          })
         // console.log(this.beforeBook)
         // this.beforeBook={title:"123",author:"456",recommend:"789",price:"1234",pic_refs:"123234"}
         //通过对象深拷贝，使得默认情况下修改后和修改前相同。用户只需用去修改想改的某个属性即可，而不修改的属性不用重新填写
@@ -156,7 +158,7 @@ export default {
 
 .submit{
   margin-top: 65% ;
-  margin-left: 40%;
+  margin-left: 41.5%;
   width: 98px;
 }
 

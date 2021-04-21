@@ -268,10 +268,14 @@ export default {
   padding: 10px 20px 10px;
   background-color: rgba(122,126,131,0.5);
 }
-
-.search_result .el-button {
-  display: block;
+.search_result .buttonset {
+  width:500px;
   margin: 10px auto;
+}
+
+.search_result .buttonset .el-button {
+  display: inline;
+  margin: 0 20px;
 }
 
 .search_result .el-pagination{
