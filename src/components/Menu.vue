@@ -10,6 +10,7 @@
           <el-button @click="numFind">书号</el-button>
           <el-button @click="nameFind">书名</el-button>
           <el-button @click="authorFind">作者</el-button>
+          <el-button id="all" @click="showAll">显示所有图书</el-button>
         </el-collapse-item>
         <el-collapse-item title="修改图书信息" name="modify">
           <el-button @click="modifyInfo">修改图书信息</el-button>
@@ -54,6 +55,10 @@ export default {
     modifyInfo(){
       console.log("修改图书信息");
       this.$emit("functionChanged",6)
+    },
+    showAll(){
+      console.log("显示所有图书");
+      this.$emit("functionChanged",7)
     }
   }
 }
@@ -66,4 +71,9 @@ el-collapse-item {
   font-size: 26px;
 }
 
+#all {
+  width: 150px;
+  margin-top: 10px;
+  margin-left: 30px;
+}
 </style>

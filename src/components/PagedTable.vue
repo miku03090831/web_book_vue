@@ -1,5 +1,8 @@
 <template>
   <div class="PagedTable">
+    <div style="display:none">
+      {{this.tableData}}
+    </div>
     <!-- 表格 -->
     <el-table
     :data="pagedBookInfo"
@@ -51,6 +54,7 @@
       <el-button @click="deleteData" type="danger">删除所有选中图书</el-button>
       <el-button @click="clearAll" type="primary">取消所有选中</el-button>
       <el-button @click="selectAll" type="primary">全选</el-button>
+      <el-button @click="fresh" type="primary">更新</el-button>
     </div>
     <!-- 分页栏 -->
     <div class="paged">
@@ -90,27 +94,35 @@ export default {
   props:["tableData","nums","query"],
   //用钩子函数，当刚刚从home获得数据的时候，加载第一页内容。 后续数据更新的时候，pagedBookInfo已经有内容了，就不会再起作用了
   beforeUpdate:function(){//就nm离谱，箭头函数和function()写法的this指向不同。。。不能用箭头函数简写
-        if(this.currentPage === 1 && this.update){
+         
+      },
+      //用于防止换页时，更新currentSelected,导致不能记住之前这一页的哪几项被选中了
+  updated:function(){
+      if(this.pageChangedFlag){
+          this.pageChangedFlag=false;
+        }
+      if(this.update){
           this.update = false;
           this.pagedBookInfo.splice(0,this.pagedBookInfo.length);
          for(var i=0;i<this.$data.pageSize && i<this.nums;i++){
             //console.log(i);
             this.pagedBookInfo.push(this.tableData[i]);
           } 
-        } 
-      },
-      //用于防止换页时，更新currentSelected,导致不能记住之前这一页的哪几项被选中了
-  updated:function(){
-    if(this.pageChangedFlag){
-          this.pageChangedFlag=false;
+          console.log("cnm")
+          console.log(this.pagedBookInfo)
+          console.log("cnm1")
+          console.log(this.tableData)
         }
   },
   methods:{
+      fresh(){
+        this.$emit("searchAgain",this.query);
+      },
       handleClick(row){
         let detailRoute = this.$router.resolve({path: "/detail",query:{id: row.id}})
         // this.$router.push({path: "/detail",query:{id: row.id}})
         window.open(detailRoute.href)
-        console.log(row.id)
+        // console.log(row.id)
       },      
       selectionChanged(val){
           if(!this.pageChangedFlag){
@@ -180,6 +192,7 @@ export default {
         let pages = 0;
         let i=0;
         for(;i+5*pages<length;i++){
+          
           onepage.push(this.tableData[i+5*pages]);
           if((i+1)%5===0){
             this.selectall[pages+1]=onepage;
@@ -187,28 +200,39 @@ export default {
             onepage=[];
             i=-1;
           }
+          // if(i+5*pages===2)
+          //   console.log(onepage);
         }
         if(i%5!=0){
           this.selectall[pages+1]=onepage;
         }
-        console.log(pages*5+i)
+        
+        // console.log(pages*5+i)
         this.selected=this.selectall
-        this.$refs.table.toggleRowSelection(this.selected[1][0],true)
-        console.log(this.selected)
+        console.log(this.selected[1])
+        
+        //this.$refs.table.toggleRowSelection(this.selected[1][0],true)
+        // console.log(this.selected)
+        // console.log("****")
         // console.log(this.currentPage)
         // console.log("****************")
-        this,this.pageChangedFlag=true;
+        console.log("1")
         console.log(this.selected[1])
-        console.log("****************")
+        this.pageChangedFlag=true;
+        // console.log(this.selected[1])
+        // console.log("****************")
         // for(let r in this.selected[this.currentPage]){
         //   this.$refs.table.toggleRowSelection(this.selected[this.currentPage][r],true)
         //   console.log(this.selected[this.currentPage][r].id);
         // }
         for(let i=0;i<5;i++){
           this.$refs.table.toggleRowSelection(this.pagedBookInfo[i],true)
+          console.log(i)
+          console.log(this.selected[1])
         }
 
         console.log("****************")
+        console.log(this.selected[1])
       }
   }
 }

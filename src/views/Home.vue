@@ -26,10 +26,14 @@
         <AddForm></AddForm>
       </div>
       <div class="searchPart" v-if="pTableVis">
-        <div class="search_condi">
+        <div class="search_condi" v-if="showallVis">
           <span class="searchProm" style="width:96px">{{ searchPrompt }}</span>
           <SearchInput ref="searchInput"></SearchInput>
           <el-button @click="search" class="search">查找</el-button>
+        </div>
+
+        <div class="search_condi_instead" v-if="!showallVis">
+          <p>显示所有图书</p>
         </div>
         
         <div class="search_result">
@@ -66,6 +70,7 @@ export default {
       func_num: 4,
       unpagedBookInfo:[],
       pTableVis: true,
+      showallVis: true,
       add1Vis:false,
       add2Vis:false,
       modVis:false,
@@ -95,14 +100,18 @@ export default {
   methods:{
     searchAgain(query){
       console.log(query);
-      this.$refs["pTable"].update=true;
-      this.$refs["pTable"].currentPage=1;
-      this.$axios.post("api/SearchBook",{
+      for(let i=0;i<2;i++){
+        this.$refs["pTable"].update=true;
+        this.$refs["pTable"].currentPage=1;
+        this.$axios.post("api/SearchBook",{
           'keyword':this.searchQuery,
           'type': this.func_num
         }).then(res=>{
           this.unpagedBookInfo=res.data//在此处发起请求，更改unpagedBookInfo的值
+          if(res.data=="没有结果")
+            this.unpagedBookInfo=[]
         })
+      }
     },
     search(){
       this.searchQuery = this.$refs['searchInput'].input;
@@ -114,6 +123,9 @@ export default {
           'type': this.func_num
         }).then(res=>{
           this.unpagedBookInfo=res.data//在此处发起请求，更改unpagedBookInfo的值
+          if(res.data=="没有结果")
+            this.unpagedBookInfo=[]
+          console.log(this.unpagedBookInfo)
         })
       // console.log(this.unpagedBookInfo)
     },
@@ -128,6 +140,7 @@ export default {
       // }
       if(this.func_num===1){
         this.pTableVis=false;
+        this.showallVis=false;
         this.add1Vis=true;
         this.add2Vis=false;
         this.modVis=false;
@@ -135,6 +148,7 @@ export default {
       }
       else if(this.func_num===2){
         this.pTableVis=false;
+        this.showallVis=false;
         this.add1Vis=false;
         this.add2Vis=true;
         this.modVis=false;
@@ -142,16 +156,26 @@ export default {
       }
       else if(this.func_num===3 || this.func_num===4 || this.func_num===5){
         this.pTableVis=true;
+        this.showallVis=true;
         this.add1Vis=false;
         this.add2Vis=false;
         this.modVis=false;
       }
-      else{
+      else if(this.func_num==6){
         this.pTableVis=false;
+        this.showallVis=false;
         this.add1Vis=false;
         this.add2Vis=false;
         this.modVis=true;
         this.unpagedBookInfo=[];
+      }
+      else{
+        this.pTableVis=true;
+        this.showallVis=false;
+        this.add1Vis=false;
+        this.add2Vis=false;
+        this.modVis=false;
+        this.searchAgain("");
       }
       
     }
@@ -194,6 +218,7 @@ export default {
 }
 
 .leftMenu .el-collapse-item__content {
+  width: 100%;
   padding: 10px 10px 10px 40px;
   background-color: rgba(122,126,131,0.7);
   border-bottom: 2px solid rgb(90, 90, 90);
@@ -241,6 +266,15 @@ export default {
   padding: 20px 20px 10px 10px;
 }
 
+.rightArea .search_condi_instead{
+  width: 80%;
+  margin: 50px auto;
+  background-color: rgba(122,126,131,0.5);
+  padding: 20px 20px 10px 10px;
+  text-align: center;
+  font-size: 20px;
+}
+
 .search_condi .searchProm{
   display:inline-block;
   text-align: right;
@@ -269,7 +303,7 @@ export default {
   background-color: rgba(122,126,131,0.5);
 }
 .search_result .buttonset {
-  width:500px;
+  width:620px;
   margin: 10px auto;
 }
 
