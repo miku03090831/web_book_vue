@@ -6,9 +6,12 @@
       <Menu @functionChanged="change_func"></Menu>     
       <el-tooltip placement="top" class="tip">
         <div slot="content">
-          <span>添加书籍：点击图书入库，并选择单本入库或者批量入库</span><br>
-          <span>搜索书籍：点击查找图书，并选择查找采用的字段</span><br>         
-          <span>删除书籍：先搜索，再删除。在搜索的结果中，选中要删除的书籍，并点击删除</span>
+          <span>添加图书：点击添加图书，并选择手动单本添加，或者从csv文件批量导入</span><br>
+          <span>查找图书：点击查找图书，可以直接查看库中所有图书，也可以根据书号，书名，作者来查找图书</span><br>         
+          <span>删除图书：在查找图书的结果中，勾选想要删除的图书，支持全选，清空所有选择，选择本页等方式</span>
+          <span>可自由选择要删除的书籍。点击删除键，再点击更新按钮，即可查看删除后的书的列表</span><br>
+          <span>修改图书信息：点击修改图书信息，先输入要修改的图书的编号。左侧以只读方式显示要修改的书原有信息，</span>
+          <span>右侧可以自行编辑书的信息，点击“提交修改”即可完成修改</span><br>
         </div>
         <el-button>查看使用说明</el-button>
       </el-tooltip>
